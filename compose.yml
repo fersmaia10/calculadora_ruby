@@ -1,0 +1,30 @@
+services:
+  app:
+    build: .
+    command: bundle exec rails s -p 3001 -b '0.0.0.0'
+    container_name: rails-app-calculadora
+    working_dir: /app-calculadora
+    volumes:
+      - .:/app-calculadora
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_URL: mysql2://root:password@db:3307/app_development
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: rails-db-calculadora
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app_development
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data_calculadora:/var/lib/mysql
+
+volumes:
+  mysql_data_calculadora:
